@@ -1,0 +1,173 @@
+[0:02] serial.print
+[0:05] and see
+[0:08] the values in the variables
+[0:10] and to study our
+[0:14] program firmware
+[0:16] we use a lot of
+[0:18] serial.print statements
+[0:20] and we print the values on the
+[0:22] serial monitor. That's how we
+[0:24] normally debug
+[0:25] Arduino firmware.
+[0:27] But the problem is
+[0:29] If your firmware is a very time critical system, adding one print line would change the timing of your system. That's another problem.
+[0:40] Very easily we can debug Arduino firmware in Arduino IDE by writing set of print lines to print the values of variables or the statements in the serial monitor.
+[0:59] That is quite easy and that is the normal way the programmers do because there is no debugger.
+[1:06] There is no debugger support available with the IDE.
+[1:10] However, if you add these print lines to your firmware for the debugging purpose, and if your system is a very time critical system, adding just one print line would change the timing of your system. That's another problem.
+[1:27] Can you understand that?
+[1:31] Now,
+[1:31] compile errors, you can,
+[1:33] the compiler can detect.
+[1:35] But the logical errors,
+[1:37] compiler can't detect.
+[1:39] If there's a logical error, we have to
+[1:41] debug it. So normally what
+[1:43] we do is, certain variable
+[1:45] values, right,
+[1:47] whether a particular
+[1:49] place executed
+[1:51] or not, to check
+[1:53] all these things, we use print statements.
+[1:55] and we print the output in the
+[1:58] serial monitor.
+[2:00] Every single print statement
+[2:02] you add to your firmware
+[2:03] change the timing
+[2:06] of your system. If the system is time
+[2:08] critical, then
+[2:10] that would create a lot of problems.
+[2:13] And finally,
+[2:15] the Arduino hardware
+[2:16] is cheap, easier
+[2:18] to use.
+[2:20] However, every
+[2:22] Arduino hardware boot,
+[2:23] there is an onboard usb to serial interface right because of that you can easily connect
+[2:31] the boot to your usb port of your computer now this onboard usb serial to interface they make
+[2:38] the boards are more expensive and power hungry than they need to be for example arduino uno
+[2:47] board you have a usb to serial interface controller right thanks to that you can directly plug the
+[2:56] board to your usb port however that part makes the board expensive and board consumes more power
+[3:06] than it needs to be another problem now if you are going to use the arduino hardware
+[3:15] for a commercial development,
+[3:18] you have to think about that task.
+[3:19] Because if you have the commercial product,
+[3:21] you have to develop in large scale.
+[3:24] Every, every,
+[3:25] every system, then
+[3:27] if you have USB to serial
+[3:29] interface, unnecessary.
+[3:31] That part, that would cost
+[3:33] you extra money.
+[3:35] That would consume more power.
+[3:37] For the academic purposes,
+[3:41] right,
+[3:42] to learning purposes,
+[3:43] It is very helpful on board USB to serial interface controller.
+[3:48] You can directly plug the board to USB port and upload your code, read the data over serial port.
+[3:58] You can do whatever you like.
+[4:00] But in the commercial development, once you have flashed the firmware into the microcontroller, thereafter do you need that USB to serial interface?
+[4:11] No.
+[4:11] once you flash the firmware to microcontroller, thereafter you don't need that USB to serial
+[4:17] interface controller. But if you are going to use Arduino hardware for a commercial product,
+[4:23] then that USB to serial interface controller would make your product little bit more expensive,
+[4:31] little bit more power hungry.
+[4:34] For example, in our
+[4:36] blink
+[4:36] the blinker system
+[4:40] that we develop
+[4:42] to blink an LED.
+[4:44] After flashing
+[4:46] the hardware, after
+[4:48] flashing firmware to
+[4:50] microcontroller, then only
+[4:52] thing you need is the microcontroller,
+[4:55] the crystal oscillator
+[4:56] to give pulses
+[4:58] to microcontroller,
+[4:59] the resistor and led connected to pin number eight that's it nothing else you need even the
+[5:08] reset button you don't need you can directly connect the reset pin to five volt line connect
+[5:15] the the crystal oscillator to the clock pins and connect the led and resistor to
+[5:24] pin number 5
+[5:26] sorry pin number 8
+[5:27] PB0 that's it
+[5:30] you don't need anything else
+[5:32] the USB to interface
+[5:34] controller and other power
+[5:36] circuit other LEDs
+[5:37] and all these things power LED
+[5:40] RX-TX LEDs
+[5:42] all these things you need
+[5:44] to flash the
+[5:45] code to microcontroller once you
+[5:48] flash thereafter
+[5:49] you don't need them if you
+[5:52] keep them in your commercial product,
+[5:54] then they will make
+[5:56] your product little bit expensive.
+[5:58] They will make your product
+[5:59] little bit power hungry.
+[6:01] Can you understand that?
+[6:03] Sir,
+[6:04] micro-control only for our production
+[6:09] and it processing power
+[6:13] the same
+[6:15] with 16
+[6:18] because
+[6:19] the Arduino board
+[6:21] crystal supplies
+[6:23] 16 megahertz
+[6:25] and the
+[6:27] microcontroller also
+[6:28] has
+[6:29] crystal or something.
+[6:35] Inside?
+[6:36] Inside.
+[6:38] No, actually there is no
+[6:40] crystal inside the microcontroller.
+[6:43] Inside the microcontroller
+[6:45] there is RC oscillator.
+[6:47] Resistor capacitor oscillator.
+[6:49] Right, which is not very accurate compared to crystal oscillator.
+[6:53] Right, you can change the frequency of that internal oscillator by changing the R and C values.
+[7:03] Right, based on your program codes.
+[7:05] Okay.
+[7:07] Right, so you have to write a firmware.
+[7:08] In the firmware, you have to specify certain statements to change the R and C values, resistor and capacitor values in the internal oscillator.
+[7:21] Based on that, you can clock internally your microcontroller with the required frequency.
+[7:28] However, that RC oscillator is not very accurate.
+[7:33] That is normally any RC oscillator is not very accurate.
+[7:37] That is the nature of RC oscillators.
+[7:40] That's why we use crystal oscillators.
+[7:42] Crystal oscillators are very accurate.
+[7:45] Even in the Arduino Uno board,
+[7:47] that 16 MHz clock source is not a crystal oscillator.
+[7:51] It's a ceramic resonator.
+[7:53] Ceramic resonators are cheap and smaller than the crystals.
+[7:58] But not that accurate.
+[8:00] Crystals are the most accurate.
+[8:03] And next, ceramic resonators.
+[8:05] and next
+[8:07] RC oscillator. The most accurate
+[8:09] crystal. Then ceramic
+[8:11] resonator. And then
+[8:13] RC oscillator. So internal oscillator
+[8:16] is RC. Now in the Arduino
+[8:17] UNA board you have ceramic resonator.
+[8:20] Anything else? Any other question?
+[8:22] Ask. Ask if you have questions.
+[8:24] Don't hesitate and ask.
+[8:25] Because at the end of this course module
+[8:27] you should have very thorough
+[8:29] knowledge about all these things
+[8:31] related to embedded systems.
+[8:33] You should have a very thorough knowledge.
+[8:40] To get that knowledge you need to ask lot of questions.
+[8:44] So ideally you need to read a lot.
+[8:47] At least if you are not going to read a lot ask lot of questions.
+[8:50] Right.
+[8:51] If no questions let's continue our lesson.
+[8:55] I.O. register.
+[8:57] Right.
+[8:57] We discuss I.O. registers.
+[8:59] We discuss two input output registers.

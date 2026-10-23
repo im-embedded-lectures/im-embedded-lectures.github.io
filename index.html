@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Embedded Systems Lectures</title>
+<style>
+:root{--bg:#fbfaf7;--panel:#fff;--ink:#1d1d1b;--mute:#6b6a65;--line:#e6e3dc;--acc:#1f6f5c;--hl:#e9f3ef;--shade:rgba(20,20,18,.55)}
+@media (prefers-color-scheme:dark){:root{--bg:#151614;--panel:#1d1f1c;--ink:#e8e6e1;--mute:#9a988f;--line:#2e302c;--acc:#6cc3a6;--hl:#21342d;--shade:rgba(0,0,0,.65)}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.app{display:grid;grid-template-columns:340px 1fr;height:100vh}
+aside{border-right:1px solid var(--line);overflow:auto;padding:16px}
+main{overflow:auto;padding:20px 28px}
+h1{font-size:17px;margin:0 0 4px}
+.sub{color:var(--mute);font-size:13px;margin-bottom:12px}
+input[type=search]{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);font:inherit;margin-bottom:12px}
+.lec{border-top:1px solid var(--line);padding:8px 0}
+.lec>button{all:unset;cursor:pointer;display:block;width:100%}
+.lec .t{font-weight:600}.lec .m{color:var(--mute);font-size:12.5px}
+.lec.pending{opacity:.55}.lec.pending .t{font-weight:500}
+.secs{margin:6px 0 2px;padding:0;list-style:none}
+.secs li{display:flex;gap:8px;align-items:flex-start;padding:3px 0 3px 4px;font-size:13.5px;border-radius:6px}
+.secs li.on,.lec>button.on .t{color:var(--acc)}
+.secs li a{color:inherit;text-decoration:none;cursor:pointer;flex:1}
+.secs li .d{color:var(--mute);font-size:12px;white-space:nowrap}
+.bar{height:4px;background:var(--line);border-radius:2px;margin-top:6px}.bar i{display:block;height:100%;background:var(--acc);border-radius:2px}
+.player{position:relative;border-radius:10px;overflow:hidden;background:#000}
+.player:fullscreen{border-radius:0;display:flex;align-items:center}
+video{display:block;width:100%;max-height:62vh;background:#000}
+.player:fullscreen video{max-height:100vh;height:100%}
+audio{width:100%;display:block}
+.player.audio{background:none;overflow:visible}
+.wm{position:absolute;top:6px;right:8px;text-align:right;pointer-events:none;color:#fff;opacity:.55;white-space:pre;
+  font-size:10.5px;line-height:1.35;text-shadow:0 1px 2px #000,0 0 6px #000}
+.player:fullscreen .wm{font-size:14px;top:12px;right:16px}
+@media (max-width:560px){.wm{font-size:9px}}
+.player.audio .wm{position:static;color:var(--mute);text-shadow:none;max-width:none;opacity:1;margin-top:6px}
+.head{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap;margin:14px 0 6px}
+.head h2{font-size:19px;margin:0}
+.links{display:flex;gap:6px 14px;flex-wrap:wrap}
+.links a{color:var(--acc);font-size:13px;cursor:pointer;text-decoration:none}
+.links a:hover{text-decoration:underline}
+.note{font-size:13px;color:var(--mute);background:var(--hl);border-radius:8px;padding:8px 10px;margin:8px 0}
+.tr{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+.tr p{margin:0;padding:3px 6px;border-radius:6px;cursor:pointer}
+.tr p:hover{background:var(--hl)}.tr p.cur{background:var(--hl)}
+.tr span{color:var(--mute);font-variant-numeric:tabular-nums;margin-right:10px;font-size:12.5px}
+.hits p b{color:var(--acc)}
+.empty{color:var(--mute);margin-top:30vh;text-align:center}
+.modal{position:fixed;inset:0;background:var(--shade);display:flex;align-items:center;justify-content:center;padding:16px;z-index:9}
+.modal[hidden]{display:none}
+.card{background:var(--panel);color:var(--ink);max-width:520px;border-radius:14px;padding:22px 24px;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.card h3{margin:0 0 10px;font-size:18px}
+.card p{margin:0 0 10px;font-size:14.5px}
+.card button{margin-top:6px;background:var(--acc);color:#fff;border:0;border-radius:8px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer}
+.foot{color:var(--mute);font-size:12px;margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+.foot a{color:inherit}
+@media (max-width:800px){.app{grid-template-columns:1fr;height:auto}aside{border-right:0;border-bottom:1px solid var(--line);max-height:50vh}main{padding:16px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <h1>Embedded Systems — Lectures</h1>
+  <div class="sub" id="stats"></div>
+  <input type="search" id="q" placeholder="Search all transcripts…">
+  <div id="list"></div>
+  <div class="foot">For educational use only · do not share outside the batch · <a id="notice-link" href="#">notice</a></div>
+</aside>
+<main id="main"><div class="empty">Pick a lecture or section on the left.</div></main>
+</div>
+<div class="modal" id="notice" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="nt">
+    <h3 id="nt">Before you start</h3>
+    <p>These are recordings of the previous year's Embedded Systems lectures that were already shared in our batch WhatsApp groups. We have only structured and organised them so they are easier to find and study.</p>
+    <p><b>Please keep them within the batch — do not share the recordings or this link with outsiders.</b></p>
+    <p>We hold no responsibility for the content. This is purely an educational effort to make revision easier.</p>
+    <p>Happy learning!</p>
+    <button id="ack">I understand</button>
+  </div>
+</div>
+<script src="index-data.js"></script>
+<script>
+const L = window.LECTURES || [];
+const WM = window.WATERMARK || "";
+const $ = s => document.querySelector(s);
+const fmt = s => { s = Math.max(0, Math.floor(s)); const h = Math.floor(s/3600), m = Math.floor(s%3600/60), x = s%60;
+  return (h ? h + ":" + String(m).padStart(2,"0") : m) + ":" + String(x).padStart(2,"0"); };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const href = p => /^https?:/.test(p) ? p : encodeURI(p);
+const store = (k, v) => { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } };
+let done = {}; try { done = JSON.parse(store("done") || "{}"); } catch (e) {}
+let cur = null, stopAt = null;
+
+const notice = $("#notice");
+if (store("ack-notice") !== "1") notice.hidden = false;
+$("#ack").onclick = () => { store("ack-notice", "1"); notice.hidden = true; };
+$("#notice-link").onclick = e => { e.preventDefault(); notice.hidden = false; };
+
+function renderList() {
+  const ready = L.filter(l => !l.pending);
+  const total = ready.reduce((a, l) => a + l.sections.length, 0), fin = ready.reduce((a, l) => a + l.sections.filter(s => done[s.text]).length, 0);
+  const hrs = ready.reduce((a, l) => a + l.duration, 0) / 3600;
+  $("#stats").textContent = `${ready.length}/${L.length} lectures ready · ${hrs.toFixed(1)} h · ${fin}/${total} sections done`;
+  $("#list").innerHTML = L.map((l, i) => {
+    if (l.pending) return `<div class="lec pending"><div class="t">${String(l.n).padStart(2,"0")}. Lecture of ${esc(l.date)}</div><div class="m">Being processed — check back soon</div></div>`;
+    const n = l.sections.filter(s => done[s.text]).length;
+    return `<div class="lec"><button data-l="${i}" class="${cur && cur.l === i && cur.s == null ? "on" : ""}">
+      <div class="t">${String(l.n).padStart(2,"0")}. ${esc(l.title)}</div>
+      <div class="m">${esc(l.date)} · ${fmt(l.duration)}${l.audio ? " · audio" : ""} · ${n}/${l.sections.length} done</div></button>
+      <div class="bar"><i style="width:${100*n/Math.max(1,l.sections.length)}%"></i></div>
+      <ul class="secs">${l.sections.map((s, j) => `<li class="${cur && cur.l === i && cur.s === j ? "on" : ""}">
+        <input type="checkbox" aria-label="Mark section done" data-f="${esc(s.text)}" ${done[s.text] ? "checked" : ""}>
+        <a data-l="${i}" data-s="${j}">${j+1}. ${esc(s.title)}</a><span class="d">${fmt(s.end - s.start)}</span></li>`).join("")}</ul></div>`;
+  }).join("");
+}
+
+function open(li, si, at) {
+  const l = L[li], s = si == null ? null : l.sections[si];
+  if (!l || l.pending) return;
+  cur = { l: li, s: si };
+  // A local section clip exists only in the full local library; online and in offline packs we play the range of the full recording.
+  const clip = s && s.file && !l.url, off = clip ? s.start : 0;
+  const src = href(clip ? s.file : (l.url || l.file));
+  const lines = l.segs.filter(g => !s || (g[0] >= s.start - 1 && g[0] < s.end));
+  if (s && !clip && at == null) at = s.start;
+  stopAt = s && !clip ? s.end : null;
+  const media = l.audio ? `<audio id="v" controls preload="metadata" src="${src}"></audio>` : `<video id="v" controls preload="metadata" playsinline src="${src}"></video>`;
+  const dl = [];
+  dl.push(`<a href="${href(l.url || l.file)}" download>Download ${l.audio ? "audio" : "video"}</a>`);
+  dl.push(`<a href="${href(s ? s.text : l.transcript)}" target="_blank">Transcript</a>`);
+  if (l.zip) dl.push(`<a href="${href(l.zip)}">Offline pack (.zip${l.zip_mb ? ", " + l.zip_mb + " MB" : ""})</a>`);
+  if (s) dl.unshift(`<a data-l="${li}">Full lecture</a>`);
+  $("#main").innerHTML = `<div class="player${l.audio ? " audio" : ""}" id="pl">${media}${WM ? `<div class="wm">${esc(WM)}</div>` : ""}</div>
+    <div class="head"><h2>${s ? `${l.n}.${si+1} ${esc(s.title)}` : `${l.n}. ${esc(l.title)}`}</h2><div class="links">${dl.join("")}</div></div>
+    <div class="sub">${l.audio ? "Audio-only recording (no video was recorded) · " : ""}${esc(l.date)}${l.summary ? " · " + esc(l.summary) : ""}</div>
+    ${s && !clip ? `<div class="note">Playing ${fmt(s.start)}–${fmt(s.end)} of the full lecture; it pauses at the end of this section.</div>` : ""}
+    <div class="tr">${lines.map(g => `<p data-t="${g[0] - off}"><span>${fmt(g[0] - off)}</span>${esc(g[1])}</p>`).join("")}</div>`;
+  const v = $("#v");
+  v.addEventListener("error", () => {
+    if (!$("#err")) $("#pl").insertAdjacentHTML("afterend", `<div class="note" id="err">This recording can't be loaded right now. If you opened an offline pack, keep index.html next to the lecture folder.</div>`);
+  });
+  if (at != null) v.addEventListener("loadedmetadata", () => { v.currentTime = at; v.play().catch(() => {}); }, { once: true });
+  v.addEventListener("timeupdate", () => {
+    if (stopAt != null && v.currentTime >= stopAt) { v.pause(); stopAt = null; }
+    const ps = [...document.querySelectorAll(".tr p")]; let k = -1;
+    for (let i = 0; i < ps.length && +ps[i].dataset.t <= v.currentTime; i++) k = i;
+    const old = $(".tr p.cur"); if (old && old !== ps[k]) old.classList.remove("cur");
+    if (k >= 0) ps[k].classList.add("cur");
+  });
+  renderList(); $("main").scrollTop = 0;
+}
+
+// keep the watermark visible in fullscreen: fullscreen the wrapper instead of the bare <video>
+document.addEventListener("fullscreenchange", () => {
+  const v = $("#v"), pl = $("#pl");
+  if (v && pl && document.fullscreenElement === v) document.exitFullscreen().then(() => pl.requestFullscreen()).catch(() => {});
+});
+
+function search(q) {
+  q = q.trim().toLowerCase(); if (q.length < 3) return;
+  const hits = [];
+  L.forEach((l, li) => !l.pending && l.segs.forEach(g => { if (g[1].toLowerCase().includes(q)) hits.push([li, g]); }));
+  const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "ig");
+  $("#main").innerHTML = `<div class="head"><h2>${hits.length} matches for “${esc(q)}”</h2></div><div class="tr hits">` +
+    hits.slice(0, 400).map(([li, g]) => `<p data-l="${li}" data-at="${g[0]}"><span>${L[li].n} · ${fmt(g[0])}</span>${esc(g[1]).replace(re, m => `<b>${m}</b>`)}</p>`).join("") + "</div>";
+}
+
+document.addEventListener("click", e => {
+  const p = e.target.closest(".tr p"), a = e.target.closest("[data-l]");
+  if (p && p.dataset.at != null) return open(+p.dataset.l, null, +p.dataset.at);
+  if (p) { const v = $("#v"); stopAt = null; v.currentTime = +p.dataset.t; v.play().catch(() => {}); return; }
+  if (a) open(+a.dataset.l, a.dataset.s == null ? null : +a.dataset.s);
+});
+document.addEventListener("change", e => { if (e.target.dataset.f) { done[e.target.dataset.f] = e.target.checked; store("done", JSON.stringify(done)); renderList(); } });
+let tm; $("#q").addEventListener("input", e => { clearTimeout(tm); tm = setTimeout(() => search(e.target.value), 250); });
+renderList();
+if (!L.length) $("#main").innerHTML = `<div class="empty">No lectures found. Keep index.html and index-data.js together.</div>`;
+</script>
+</body>
+</html>

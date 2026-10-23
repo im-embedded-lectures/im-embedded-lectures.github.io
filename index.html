@@ -133,7 +133,7 @@ function open(li, si, at) {
   dl.push(`<a href="${href(s ? s.text : l.transcript)}" target="_blank">Transcript</a>`);
   if (l.zip) dl.push(`<a href="${href(l.zip)}">Offline pack (.zip${l.zip_mb ? ", " + l.zip_mb + " MB" : ""})</a>`);
   if (s) dl.unshift(`<a data-l="${li}">Full lecture</a>`);
-  $("#main").innerHTML = `<div class="player${l.audio ? " audio" : ""}" id="pl">${media}${WM ? `<div class="wm">${esc(WM)}</div>` : ""}</div>
+  $("#main").innerHTML = `${l.audio ? `<div class="note">ℹ️ This lecture was a voice recording. The relevant slides were added later at the matching points, so the audio quality is lower than the video lectures.</div>` : ""}<div class="player${l.audio ? " audio" : ""}" id="pl">${media}${WM ? `<div class="wm">${esc(WM)}</div>` : ""}</div>
     <div class="head"><h2>${s ? `${l.n}.${si+1} ${esc(s.title)}` : `${l.n}. ${esc(l.title)}`}</h2><div class="links">${dl.join("")}</div></div>
     <div class="sub">${l.audio ? "Audio-only recording (no video was recorded) · " : ""}${esc(l.date)}${l.summary ? " · " + esc(l.summary) : ""}</div>
     ${s && !clip ? `<div class="note">Playing ${fmt(s.start)}–${fmt(s.end)} of the full lecture; it pauses at the end of this section.</div>` : ""}
